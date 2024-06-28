@@ -1,0 +1,55 @@
+class Solution {
+public:
+    vector<int> minimumTime(int n, vector<vector<int>>& edges, vector<int>& disappear) {
+
+        vector<vector<pair<int, int>>> aj(n);
+        for ( auto edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int length = edge[2];
+            aj[u].push_back({v, length});
+            aj[v].push_back({u, length});
+        }
+
+        // Initialize the answer array with -1 (unreachable)
+        vector<int> answer(n, -1);
+
+        // Initialize a priority queue for Dijkstra's algorithm
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+        // Insert source node (0) into the priority queue with time 0
+        pq.push({0, 0});
+
+        // Run Dijkstra's algorithm
+        while (!pq.empty()) {
+            auto [time, node] = pq.top();
+            pq.pop();
+
+            // If the node has already been visited with a smaller time, skip it
+            if (answer[node] != -1 && answer[node] < time) {
+                continue;
+            }
+
+            // Update the time to reach the current node
+            answer[node] = time;
+
+            // Traverse the neighbors of the current node
+            for (auto neighbor : aj[node]) {
+                int nod = neighbor.first;
+                int nt = time + neighbor.second;
+
+                // If the next node disappears before reaching it, continue
+                if (nt >= disappear[nod]) {
+                    continue;
+                }
+
+                // If the next node can be reached in less time, update the priority queue
+                if (answer[nod] == -1 || nt < answer[nod]) {
+                    pq.push({nt, nod});
+                }
+            }
+        }
+
+        return answer;
+    }
+};
