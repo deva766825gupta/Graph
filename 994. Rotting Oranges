@@ -1,0 +1,77 @@
+class Solution {
+public:
+    
+    void bfs(vector<vector<int>> &grid, queue<pair<int,int>> &q, int &count, int &fresh)
+    {
+        while(!q.empty())
+        {   
+            int s = q.size();
+            int flag=0;
+            for(int k=0 ; k<s ; k++)
+            { 
+                int i=q.front().first;
+                int j=q.front().second;
+                q.pop();
+                
+
+                if(i>0 && grid[i-1][j]==1)
+                {
+                    flag=1;
+                    grid[i-1][j] = 2;
+                    q.push({i-1, j});
+                    fresh--;
+                }
+                if(i<grid.size()-1 && grid[i+1][j]==1)
+                {
+                    flag=1;
+                    grid[i+1][j] = 2;
+                    q.push({i+1, j});
+                    fresh--;
+                }
+                if(j>0 && grid[i][j-1]==1)
+                {
+                    flag=1;
+                    grid[i][j-1] = 2;
+                    q.push({i, j-1});
+                    fresh--;
+                }
+                if(j<grid[0].size()-1 && grid[i][j+1]==1)
+                {
+                    flag=1;
+                    grid[i][j+1] = 2;
+                    q.push({i, j+1});
+                    fresh--;
+                }
+            }
+            if(flag==1)
+                count++;
+        }
+    }
+
+    int orangesRotting(vector<vector<int>>& grid) {
+        queue<pair<int,int>> rotten;
+        int count=0, fresh=0;
+
+        for(int i=0 ; i<grid.size() ; i++)
+        {
+            for(int j=0 ; j<grid[i].size() ; j++)
+            {
+                if(grid[i][j]==2)
+                {
+                    rotten.push({i, j});
+                }
+                if(grid[i][j]==1)
+                {
+                    fresh++;
+                }
+            }
+        }
+
+        bfs(grid, rotten, count, fresh);
+
+        if(fresh!=0)
+            return -1;
+        return count;
+
+    }
+};
