@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void dfs(vector<vector<char>>& grid, int row, int col, vector<vector<int>>& vis) {
+        vis[row][col] = 1;
+        int numRows = grid.size();
+        int numCols = grid[0].size();
+        int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};  // Up, down, left, right
+
+        for (int i = 0; i < 4; ++i) {
+            int newRow = row + directions[i][0];
+            int newCol = col + directions[i][1];
+            if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols 
+                && grid[newRow][newCol] == '1' && !vis[newRow][newCol]) {
+                dfs(grid, newRow, newCol, vis);
+            }
+        }
+    }
+
+    int numIslands(vector<vector<char>>& grid) {
+        int numRows = grid.size();
+        int numCols = grid[0].size();
+        int count = 0;
+        vector<vector<int>> vis(numRows, vector<int>(numCols, 0));
+
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                if (grid[i][j] == '1' && vis[i][j] == 0) {
+                    dfs(grid, i, j, vis);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};
