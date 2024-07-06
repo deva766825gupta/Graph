@@ -1,0 +1,17 @@
+int find(int A[],int X)
+{
+       //add code here
+       if(X==A[X])
+       {
+           return X;
+       }
+       return A[X]=find(A,A[X]);
+}
+void unionSet(int A[],int X,int Z)
+{
+	//add code here.
+		//add code here.
+	int ulp_X = find(A,X); // ultimate parent of the X
+	int ulp_Z = find(A,Z); // ultimate parent of the Z
+	A[ulp_X] = ulp_Z;
+}
