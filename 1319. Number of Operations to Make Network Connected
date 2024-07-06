@@ -1,0 +1,50 @@
+class Solution {
+public:
+    void ne(int n,vector<vector<int>>& r, int source,vector<bool>& vd)
+    {
+        queue<int> q;
+        q.push(source);
+        vd[source]=true;
+        while(!q.empty())
+        {
+            int v=q.front();
+            q.pop();
+
+            vector<int> temp=r[v];
+             for(int i=0;i<temp.size();i++){
+                int vertex=temp[i];
+                if(vd[vertex]==false)
+                {
+                    q.push(vertex);
+                    vd[vertex]=true;
+                }
+                
+            }
+
+        }
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        if(connections.size()<n-1)
+        {
+            return -1;
+        }
+        vector<vector<int>> r(n);
+        for(auto i:connections)
+        {
+            r[i[0]].push_back(i[1]);
+            r[i[1]].push_back(i[0]);
+
+        }
+        int nc=0;
+         vector<bool> vd(n,false);
+        for(int i=0;i<vd.size();i++)
+        {
+            if(vd[i]==false)
+            {
+                nc++;
+                ne(n,r,i,vd);
+            }
+        }
+        return nc-1;
+    }
+};
